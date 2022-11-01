@@ -51,7 +51,6 @@ void setup() {
   pinMode(carGreenPin, OUTPUT);
   
   Serial.begin(9600);  
-
 }
 
 void loop() {
