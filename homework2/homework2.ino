@@ -12,14 +12,17 @@ unsigned long debounceTime = 0;
 
 const int buzzerPin = 11;
 const int buttonPin = 2;
+
 //initialize semaphore for pedestrians
 const int pedRedPin = 8;
 const int pedGreenPin = 9;
+
 //initialize semaphore for cars
 const int carRedPin= 5;
 const int carYellowPin = 6;
 const int carGreenPin = 7;
 
+//functionalities for pedestrians's semaphor 
 const int buzzerSound = 500;
 const int buzzTimeDebounce = 250;
 const int buzzFastTimeDebounce = 250;
@@ -28,6 +31,7 @@ int blinkValue = LOW;
 unsigned long lastBuzz = 0;
 unsigned long lastBlink = 0;
 
+//functionalities for button
 int reading = 0;
 bool buttonPressed = 0;
 bool lastButtonState = LOW;
@@ -54,10 +58,7 @@ void loop() {
    buttonCheck();
    manageStates();
    chooseState();
-
 }
-
-
 
 void state1() {
   digitalWrite(pedRedPin, HIGH);
@@ -67,7 +68,6 @@ void state1() {
   digitalWrite(carGreenPin, HIGH);
   noTone(buzzerPin);    
 }
-
 
 void state2() {
   digitalWrite(pedRedPin, HIGH);
@@ -88,7 +88,6 @@ void state3() {
   digitalWrite(carGreenPin, LOW);
   if (millis() - lastBuzz > buzzTimeDebounce) {
     noTone(buzzerPin);
- 
   } 
   if (millis() - lastBuzz > 2 * buzzTimeDebounce) {
     tone(buzzerPin, buzzerSound);
@@ -104,11 +103,10 @@ void state4() {
     lastBlink = millis();
   }
   digitalWrite(pedGreenPin, blinkValue);
-  
   digitalWrite(carRedPin, HIGH);
   digitalWrite(carYellowPin, LOW);
   digitalWrite(carGreenPin, LOW);
-  
+
   if (millis() - lastBuzz > buzzFastTimeDebounce) {
     noTone(buzzerPin);
   }
@@ -139,28 +137,22 @@ void buttonCheck() {
 
 void manageStates() {
     if(state == STATE1 && millis() - debounceTime > state1Debounce && buttonPressed ){
-      
       state = STATE2;
       debounceTime = millis();
       buttonPressed = 0;
     } 
     else
       if(state == STATE2 && millis() - debounceTime > state2Debounce ){
-        
         state = STATE3;
         debounceTime = millis();
-        
       }
       else
         if(state == STATE3 && millis() - debounceTime > state3Debounce ){
-          
           state = STATE4;
           debounceTime = millis();
-          
-      }
+        }
         else
           if(state == STATE4 && millis() - debounceTime > state4Debounce){
-        
             state = STATE1;
             debounceTime = millis();
             
@@ -168,14 +160,20 @@ void manageStates() {
 }
 
 void chooseState(){
-  if (state == 1) {
-    state1();
-  } else if (state == 2) {
-    state2();
-  } else if (state == 3) {
-    state3();
-  } else if (state == 4) {
-    state4();
-  }
+  if (state == STATE1) {
+      state1();
+  } 
+  else 
+    if (state == STATE2) {
+        state2();
+    } 
+    else  
+      if (state == STATE3) {
+        state3();
+    } 
+    else  
+      if (state == STATE4) {
+        state4();
+    }
 }
 
