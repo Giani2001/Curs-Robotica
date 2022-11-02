@@ -24,6 +24,7 @@ const int carGreenPin = 7;
 
 //functionalities for pedestrians's semaphor 
 const int buzzerSound = 500;
+const int buzzerSoundState3 = 250;
 const int buzzTimeDebounce = 250;
 const int buzzFastTimeDebounce = 250;
 const int blinkTimeDebounce = 500;
@@ -89,7 +90,7 @@ void state3() {
     noTone(buzzerPin);
   } 
   if (millis() - lastBuzz > 2 * buzzTimeDebounce) {
-    tone(buzzerPin, buzzerSound);
+    tone(buzzerPin, buzzerSoundState3);
     lastBuzz = millis();
   } 
 }
