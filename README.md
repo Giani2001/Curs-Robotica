@@ -36,7 +36,7 @@ HI everyone, this is my repo to upload my homeworks for the IntroductionInRoboti
 [Link to the first homework code!](https://github.com/Giani2001/IntroductionInRobotics/blob/main/homework1/homework1_robotics.ino)
 
 
-## CrossWalk
+## Homework2 - CrossWalk
 
 ### Task Requirements:
 Building the traffic lights for a crosswalk. You
