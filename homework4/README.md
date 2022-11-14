@@ -41,7 +41,7 @@ is set to the first (rightmost) digit, in the first state.
 
 
 ### Link to the code:
-[Link to the second homework code!](https://github.com/Giani2001/IntroductionInRobotics/blob/main/homework4/homework4.ino)
+[Link to the 4th homework code!](https://github.com/Giani2001/IntroductionInRobotics/blob/main/homework4/homework4.ino)
 
 ### Link to the video:
 [Link to the video!](https://youtube.com/shorts/_WkBwA_8eAo?feature=share)
