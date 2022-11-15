@@ -72,7 +72,7 @@ int digitArray[16] = {
 
 bool reading = 0;
 bool lastButtonState = 0;
-unsigned long lastDebounceTimePressed =0; 
+unsigned long lastDebounceTimePressed = 0; 
 bool lastReading = 0;
 bool buttonPressed = 0;
 unsigned long longPressedTime = 0;
@@ -146,37 +146,23 @@ void resetDigits() {
 
 }
 
-
 void loop() {
   buttonCheck();
-  // read values of joystick
   xValue = analogRead(pinX);
   yValue = analogRead(pinY);
-  
-  //blinkPoint();
-  //longPressedReset();
-  
-  if (!buttonPressed) { // state 1
+  if (!buttonPressed) {
     state1();
-      
   } 
   else { // state 2
-    state2();
-   
-   
+    state2();  
   }
-  
-  
   Serial.println(state);
-
   writeDigits();
- 
 }
 void blinkPoint(){ 
   if (millis() - lastDpTime > dpDelay) { // blinking digital point
       points[currentDisplay] = !points[currentDisplay];
       lastDpTime = millis();
-
   }
 }
 
@@ -207,12 +193,12 @@ void state2(){
   points[currentDisplay] = true; // activate the digital point to the current digit
     // for y axis 0 is max upward and 1023 is max downward
     if (yValue < minThreshold && !joyYMoved) { // if the joystick moved upward
-      if (digits[currentDisplay] < maxDigit) { // and current digit is not max
+      if (digits[currentDisplay] < maxDigit) { 
         ++digits[currentDisplay]; // increment
       }
-      joyYMoved = true; // boolean to increment the value for each movement (not continuosly)
+      joyYMoved = true; 
     } 
-    if (yValue > maxThreshold && !joyYMoved) { // analog but downward
+    if (yValue > maxThreshold && !joyYMoved) {
       if (digits[currentDisplay] > minDigit) {
         --digits[currentDisplay];
       }
