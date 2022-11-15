@@ -104,7 +104,19 @@ void setup() {
   readEEPROM();
   Serial.begin(9600);
 }
-
+void loop() {
+  buttonCheck();
+  xValue = analogRead(pinX);
+  yValue = analogRead(pinY);
+  if (!buttonPressed) {
+    state1();
+  } 
+  else { 
+    state2();  
+  }
+  Serial.println(state);
+  writeDigits();
+}
 // function to read last value from EEPROM
 void readEEPROM () {
   for (int i = 0; i <= displayCount; ++i) {
@@ -146,19 +158,6 @@ void resetDigits() {
 
 }
 
-void loop() {
-  buttonCheck();
-  xValue = analogRead(pinX);
-  yValue = analogRead(pinY);
-  if (!buttonPressed) {
-    state1();
-  } 
-  else { // state 2
-    state2();  
-  }
-  Serial.println(state);
-  writeDigits();
-}
 void blinkPoint(){ 
   if (millis() - lastDpTime > dpDelay) { // blinking digital point
       points[currentDisplay] = !points[currentDisplay];
