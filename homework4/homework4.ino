@@ -144,7 +144,7 @@ void writeDigits() {
   for (int i = 0; i <= displayCount; ++i) {
     showDigit(i);
     writeReg(digitArray[digits[i]], points[i]);
-    EEPROM.write(i, digits[i]);
+    EEPROM.update(i, digits[i]);
   
     delay(3);
   }
