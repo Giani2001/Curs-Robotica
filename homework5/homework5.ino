@@ -3,6 +3,7 @@
 const byte dinPin = 12;
 const byte clockPin = 13;
 const byte loadPin = 10;
+bool okPlay = 0;
 int playIndex = 0;
 LedControl lc = LedControl(dinPin, clockPin, loadPin, 1);
 const byte RS = 9;
@@ -11,11 +12,13 @@ const byte d4 = 7;
 const byte d5 = 6;
 const byte d6 = 5;
 const byte d7 = 4;
+bool aboutEntry = false;
+bool howToPlayEntry = false;
 int settingIndex = 0; 
 LiquidCrystal lcd(RS, enable, d4, d5, d6, d7);
-const int debounceTotalScroll = 400;
+const int debounceTotalScroll = 300;
 const int debounceTotal = 400;
-const int debounceTotal2 = 200;
+const int debounceTotal2 = 300;
 int contorFour = 0;
 unsigned long scrollDebounce = 0;
 unsigned long scrollDebounceFour = 0;
@@ -24,7 +27,7 @@ int menuIndex = 0;
 const int menuSize = 5;
 int brightMat = 0;
 const String menu[menuSize] = {"Play Game ", "Highscore ", "Settings ", "About ", "How To Play"};
-
+bool ok = 0;
 const int pinSW = 2;
 const int pinX = A1;
 const int pinY = A0;
@@ -32,8 +35,8 @@ const int pinY = A0;
 int contrastValue = 100;
 bool joyXMoved = false;
 bool joyYMoved = false;
-const int minThresHold = 0;
-const int maxThresHold = 150;
+const int minThresHold = 200;
+const int maxThresHold = 600;
 int xValue = 0;
 int yValue = 0;
 unsigned long lastDebounceTimeMovement = 0;
@@ -51,7 +54,7 @@ const int longDebounceTimePressLong = 3000;
 bool buttonState = 0;
 bool buttonPressedState = 0;
 unsigned long lasDebounceTimePressed = 0 ;
-const int debounceDelayPressed = 50;
+const int debounceDelayPressed = 20;
 const String firstRowAbout = "Enjoy Game! ";
 const String secondRowAbout = "Git:Giani2001 ";
 unsigned long lastAboutDebounce = 0 ;
@@ -60,15 +63,16 @@ int controlFour = 0;
 const String firstRowHow="How To Play!";
 const String secondRowHow="Move the joystick UP and DOWN to not go into an obstacle!";
 
-
+unsigned long lastDebounceClear = 0;
+const int clearTime = 10;
 const int matrixBrightnessPin = 11;
 const int lcdContrastPin = 3;
 int constLCD = 126;
 unsigned long lastDebounceTotal = 0;
+bool okSetttings = 0;
 
-
-const int xPin = A1;
-const int yPin = A0;
+// const int xPin = A1;
+// const int yPin = A0;
 
 
 
@@ -80,8 +84,8 @@ byte xLastPos = 0;
 byte yLastPos = 0;
 byte xFood = random(8);
 byte yFood = random(8);
-const int minThreshold = 0;
-const int maxThreshold = 150;
+const int minThreshold = 200;
+const int maxThreshold = 600;
 int score = 0;
 const byte moveInterval = 100;
 unsigned long long lastMoved = 0;
@@ -110,12 +114,12 @@ byte matrixByte[matrixSize] = {
   B00000000,
   B00000000
 };
-
+bool okSettings = 0;
 void setup() {
 // set up the LCD's number of columns and rows:
 
-pinMode(pinX, OUTPUT);
-pinMode(pinY, OUTPUT);
+pinMode(pinX, INPUT);
+pinMode(pinY, INPUT);
 pinMode(pinSW, INPUT_PULLUP);
 pinMode(matrixBrightnessPin, OUTPUT);
 pinMode(lcdContrastPin, OUTPUT);
@@ -131,6 +135,11 @@ void loop() {
    
   xValue = analogRead(pinX);
   yValue = analogRead(pinY);
+ // delay(300);
+
+  Serial.print(xValue);
+  
+
   Serial.println(yValue);
  
   if(millis() < debounceIntro){
@@ -185,6 +194,7 @@ void moveToMenu()
   if (yValue < minThresHold && !joyYMoved) { // if the joystick moved to the left
       if(menuIndex > -1){
         --menuIndex;
+        ok = 0;
         menuIndex = menuIndex%5;
       }
       
@@ -194,6 +204,7 @@ void moveToMenu()
   if (yValue > maxThresHold && !joyYMoved) { // analog but to the right
       if( menuIndex <menuSize){
         ++menuIndex;
+        ok = 0;
         menuIndex=menuIndex%5;
       }
       
@@ -201,6 +212,7 @@ void moveToMenu()
   }
   if (yValue > minThresHold && yValue < maxThresHold) { // reset joystick X movement
       joyYMoved = false;
+      ok = 1;
     }
 }
 
@@ -271,7 +283,11 @@ void setLCDBrightness(){
 }
 
 void firstMenu(){
+    if(ok == 0 ){
     lcd.clear();
+    ok = 1;
+    }
+    
     lcd.setCursor(0,0);
     lcd.print(">");
     lcd.setCursor(1,0);
@@ -281,7 +297,10 @@ void firstMenu(){
 }
 
 void secondMenu(){
+    if(ok == 0 ){
     lcd.clear();
+    ok = 1;
+    }
     lcd.setCursor(0,0);
     lcd.print(">");
     lcd.setCursor(1,0);
@@ -291,7 +310,16 @@ void secondMenu(){
 }
 
 void thirdMenu(){
+    if(ok == 0  ){
     lcd.clear();
+    ok = 1;
+    
+    }
+   
+    if( okSettings == 1){
+        lcd.clear();
+        okSettings = 0;
+      }
     lcd.setCursor(0,0);
     lcd.print(">");
     lcd.setCursor(1,0);
@@ -301,7 +329,14 @@ void thirdMenu(){
 }
 
 void fourthMenu(){
+    if(ok == 0 ){
     lcd.clear();
+    ok = 1;
+    }
+    if ( aboutEntry == true)
+    { lcd.clear();
+      aboutEntry = false;
+    }
     lcd.setCursor(0,0);
     lcd.print(">");
     lcd.setCursor(1,0);
@@ -311,7 +346,15 @@ void fourthMenu(){
 }
 
 void fifthMenu(){
+   if(ok == 0 ){
     lcd.clear();
+    ok = 1;
+    }
+    if ( howToPlayEntry == true)
+    {
+      lcd.clear();
+      howToPlayEntry = false;
+    }
     lcd.setCursor(0,0);
     lcd.print(">");
     lcd.setCursor(1,0);
@@ -320,7 +363,10 @@ void fifthMenu(){
     lcd.print(menu[0]);
 }
 void matrixSet(){
+    if(okSetttings == 0 ){
     lcd.clear();
+    okSettings = 1;
+    }
     setMatrixContrast();
     lcd.setCursor(3,0);
     lcd.print("Led Brightness");
@@ -337,7 +383,13 @@ void matrixSet(){
 }
 
 void lcdContrastSet(){
+    
+    if(okSetttings == 0 ){
     lcd.clear();
+    okSettings = 1;
+    }
+    lastDebounceClear = millis();
+    
     setLCDContrast();
     lcd.setCursor(3,0);
     lcd.print("LCD Contrast");
@@ -351,7 +403,12 @@ void lcdContrastSet(){
 }
 
 void lcdContrastBright(){
+    
+    if(okSetttings == 0 ){
     lcd.clear();
+    okSettings = 1;
+    }
+    
     setLCDBrightness();
     lcd.setCursor(3,0);
     lcd.print("LCD Brightness");
@@ -369,6 +426,7 @@ void moveToSetting()
   if (yValue < minThresHold && !joyYMoved && buttonPressed) { // if the joystick moved to the left
       if(settingIndex > -1){
         --settingIndex;
+        okSettings = 0;
         settingIndex = settingIndex%3;
       }
       
@@ -378,6 +436,7 @@ void moveToSetting()
   if (yValue > maxThresHold && !joyYMoved && buttonPressed) { // analog but to the right
       if( settingIndex <3){
          ++settingIndex;
+         okSettings = 0;
         settingIndex = settingIndex%3;
       }
       
@@ -385,6 +444,7 @@ void moveToSetting()
   }
   if (yValue > minThresHold && yValue < maxThresHold && buttonPressed) { // reset joystick X movement
       joyYMoved = false;
+      okSettings = 1;
     }
 }
 
@@ -393,6 +453,7 @@ void moveToPlay()
   if (yValue < minThresHold && !joyYMoved && buttonPressed) { // if the joystick moved to the left
       if(playIndex > -1){
         --playIndex;
+        okPlay = 0;
         playIndex = playIndex%1;
       }
       
@@ -402,6 +463,7 @@ void moveToPlay()
   if (yValue > maxThresHold && !joyYMoved && buttonPressed) { // analog but to the right
       if( playIndex <1){
          ++playIndex;
+         okPlay = 0 ;
         playIndex = playIndex%1;
       }
       
@@ -409,51 +471,58 @@ void moveToPlay()
   }
   if (yValue > minThresHold && yValue < maxThresHold && buttonPressed) { // reset joystick X movement
       joyYMoved = false;
+      okPlay = 1;
     }
 }
 void navigateIntoMenu(){
+    okPlay = 0;
    blinkLeds();
   if(buttonPressed ==0){
     if(menuIndex == 0){
-      if(millis()-lastDebounceTotal>debounceTotal){
+     // if(millis()-lastDebounceTotal>debounceTotal2){
       // Serial.println("zero");
-      lastDebounceTotal= millis();
+     // lastDebounceTotal= millis();
       firstMenu();
-      }
+     // }
     }
     else
       if(menuIndex == 1){
-       if(millis()-lastDebounceTotal>debounceTotal){
-          lastDebounceTotal= millis();
+       //if(millis()-lastDebounceTotal>debounceTotal2){
+        //  lastDebounceTotal= millis();
           secondMenu();
-        }
+        //}
       }
       else
         if(menuIndex == 2){
-          if(millis()-lastDebounceTotal>debounceTotal2){
-              lastDebounceTotal= millis();
+          //if(millis()-lastDebounceTotal>debounceTotal2){
+          //    lastDebounceTotal= millis();
               thirdMenu();
-          }
+        //  }
         }
         else
           if(menuIndex==3){
-           if(millis()-lastDebounceTotal>debounceTotal2){
-              lastDebounceTotal= millis();
+          // if(millis()-lastDebounceTotal>debounceTotal2){
+          //    lastDebounceTotal= millis();
               fourthMenu();
-            }
+          //  }
           }
           else
            if(menuIndex==4){
-             if(millis()-lastDebounceTotal>debounceTotal2){
-              lastDebounceTotal= millis();
+           //  if(millis()-lastDebounceTotal>debounceTotal2){
+            //  lastDebounceTotal= millis();
               fifthMenu();
-             }
+           //  }
            }
   }
   else
     if(menuIndex == 3){
       if(millis()-scrollDebounce > debounceTotalScroll){
-      lcd.clear();
+       if(millis()-lastDebounceClear > clearTime ){
+          lcd.clear();
+          lastDebounceClear = millis();
+      }
+      aboutEntry = true;
+
       lcd.setCursor(0,0);    
       length= firstRowAbout.length();
       lcd.print(firstRowAbout.substring(contor, contor + 16));
@@ -470,6 +539,8 @@ void navigateIntoMenu(){
     else
       if(menuIndex == 4){
         if(millis()-scrollDebounceFour > debounceTotalScroll){
+          
+          howToPlayEntry = true;
           lcd.clear();
           lcd.setCursor(0,0);    
           lcd.print(firstRowHow);
@@ -517,14 +588,17 @@ void navigateIntoMenu(){
             //   matrix[xPos][yPos] = 1;
             //   matrix[xFood][yFood] = 1;
             // lc.setLed(0, 3, 3, false);
+            okPlay = 0;
             moveToPlay();
-            if(playIndex == 0){
+          
+            if(playIndex == 0){     
+            
             playGAME();
-             lcd.clear();
-            lcd.setCursor(0,0);    
-            lcd.print("Score:");
-            lcd.setCursor (8,0);
-            lcd.print(score);
+            lcd.clear(); 
+            showScore();
+            
+            
+            
           }
 }
 }
@@ -596,7 +670,7 @@ void updatePositions() {
   
   xLastPos = xPos;
   yLastPos = yPos;
-  if (xValue < minThreshold && menuIndex == 0 ) {
+  if (xValue < minThreshold && menuIndex == 0  && playIndex == 0) {
     if (xPos < matrixSize - 1) {
       xPos++;
     } 
@@ -604,7 +678,7 @@ void updatePositions() {
       xPos = 0;
     }
   }
-  if (xValue > maxThreshold && menuIndex == 0 ) {
+  if (xValue > maxThreshold && menuIndex == 0  && playIndex == 0) {
     if (xPos > 0) {
       xPos--;
     }
@@ -613,7 +687,7 @@ void updatePositions() {
     }
   }
 
-  if (yValue > maxThreshold && menuIndex == 0 ) {
+  if (yValue > maxThreshold && menuIndex == 0 && playIndex == 0 ) {
     if (yPos < matrixSize - 1) {
       yPos++;
     } 
@@ -622,7 +696,7 @@ void updatePositions() {
     }
   }
 
-  if (yValue < minThreshold && menuIndex == 0 ) {
+  if (yValue < minThreshold && menuIndex == 0 && playIndex == 0 ) {
     if (yPos > 0) {
       yPos--;
     }
@@ -630,10 +704,18 @@ void updatePositions() {
       yPos = matrixSize - 1;
     }
   }
-  if ((xPos != xLastPos || yPos != yLastPos) && menuIndex == 0) {
+  if ((xPos != xLastPos || yPos != yLastPos) && menuIndex == 0 && playIndex == 0) {
     matrixChanged = true;
     matrix[xLastPos][yLastPos] = 0;
     matrix[xPos][yPos] = 1;
   }  
+}
+void showScore()
+{
+  
+  lcd.setCursor(0,0);    
+  lcd.print("Score:");
+  lcd.setCursor (8,0);
+  lcd.print(score);
 }
 
