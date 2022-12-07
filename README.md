@@ -230,7 +230,7 @@ text?)
 
 
 ### Link to the code:
-[Link to the 5th homework code!](https://github.com/Giani2001/IntroductionInRobotics/blob/main/homework5/homework4.ino)
+[Link to the 5th homework code!](https://github.com/Giani2001/IntroductionInRobotics/blob/main/homework5/homework5.ino)
 
 ### Link to the video:
 [Link to the video!](https://youtu.be/gPllAhQ5pEg)
