@@ -33,31 +33,17 @@ text?)
      * short and informative description
  
 ## Components:
-*	One RGB Led
-*	Three potentiometers
-*	Resistors
+*	MAX7219
+*	LCD Display
 *	Wires
 *	Arduino Uno Board
-*	Breadboard
+*	Matrix 8x8
 
 ## Pictures:
-![alt text](https://github.com/Giani2001/IntroductionInRobotics/blob/main/homework1/setup_1.png?raw=true)
+![alt text](https://github.com/Giani2001/IntroductionInRobotics/blob/main/homework5/homework5.jpeg?raw=true)
 
-![alt text](https://github.com/Giani2001/IntroductionInRobotics/blob/main/homework1/setup_2.png?raw=true)
-
-
-![alt text](https://github.com/Giani2001/IntroductionInRobotics/blob/main/homework1/red_light.png?raw=true)
-
-
-
-![alt text](https://github.com/Giani2001/IntroductionInRobotics/blob/main/homework1/green_light.png?raw=true)
-
-
-![alt text](https://github.com/Giani2001/IntroductionInRobotics/blob/main/homework1/blue_light.png?raw=true)
-
-![alt text](https://github.com/Giani2001/IntroductionInRobotics/blob/main/homework1/simultaneous_lights.png?raw=true)
 
 ## Demo Video:
-https://youtu.be/tnK8BxJ770g
+[https://youtu.be/tnK8BxJ770g](https://youtu.be/gPllAhQ5pEg)
 
 
