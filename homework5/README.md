@@ -33,18 +33,17 @@ text?)
      * short and informative description
  
 ## Components:
-*	One RGB Led
-*	Three potentiometers
-*	Resistors
+*	MAX7219
+*	LCD Display
 *	Wires
 *	Arduino Uno Board
-*	Breadboard
+*	Matrix 8x8
 
 ## Pictures:
 ![alt text](https://github.com/Giani2001/IntroductionInRobotics/blob/main/homework5/homework5.jpeg?raw=true)
 
 
 ## Demo Video:
-https://youtu.be/tnK8BxJ770g
+[https://youtu.be/tnK8BxJ770g](https://youtu.be/gPllAhQ5pEg)
 
 
